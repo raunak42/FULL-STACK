@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+
+<head>
+    <title>
+        Todo App
+    </title>
+</head>
+
+<body>
+    Todo title<br>
+    <input type="text" id="title"></input>
+    <br><br>
+    Has it been completed?<br>
+    <input type="text" id="completed"></input>
+    <br><br>
+    Describe todo<br>
+    <input type="text" id="description"></input>
+    <br><br>
+
+    <button onclick="saveTodo()">Save Todo</button>
+    <br><br>
+
+
+    id (to edit/delete/display a todo by id)<br>
+    <input type="text" id="id"></input>
+    <br><br>
+    <button onclick="editTodo()">Edit todo(input id)</button>
+    <button onclick="DeleteTodoByID()">Delete todo(input id)</button>
+    <button onclick="getTodo()">Get todo(input id)</button>
+    <br><br><br>
+    <div id="mainArea">Main Area</div>
+
+</body>
+
+<script>
+    ///////////RefreshArea////////////// 
+    function RefreshArea(){
+        var parentElement=document.getElementById("mainArea");
+        parentElement.innerHTML=("Main Area");
+
+        getData();
+    }
+    ///////////RemoveFromBody////////
+    function removeFromBody() {
+        var todoId = document.getElementById("id").value;
+        var todoElement = document.getElementById(todoId);
+
+        if (todoElement) {
+            todoElement.parentNode.removeChild(todoElement);
+        }
+
+        RefreshArea();
+    }
+    ///////////AddAllToBody//////////
+    function displayAll(data) {
+        
+        for (var i = 0; i < data.length; i++) {
+            var parentElement = document.getElementById("mainArea")
+            var childElement = document.createElement("div")
+
+            var grandChildElement1 = document.createElement("span")
+            var grandChildElement2 = document.createElement("span")
+            var grandChildElement3 = document.createElement("span")            
+
+            grandChildElement1.innerHTML = data[i].title + " ";
+            grandChildElement2.innerHTML = data[i].completed + " ";
+            grandChildElement3.innerHTML = data[i].description + " ";
+
+            var grandChildElement4=document.createElement("button")
+            grandChildElement4.innerHTML="Delete"
+            grandChildElement4.setAttribute("onclick", "deleteTodo(" + data[i].id + ")")
+
+            var grandChildElement5 = document.createElement("span")   
+            grandChildElement5.innerHTML = "id:" + data[i].id + " ";
+
+
+
+
+            childElement.appendChild(grandChildElement1)
+            childElement.appendChild(grandChildElement2)
+            childElement.appendChild(grandChildElement3)
+            childElement.appendChild(grandChildElement4)
+            childElement.appendChild(grandChildElement5)
+            parentElement.appendChild(childElement)
+
+
+        }
+    }
+    function getDataCallback(resp){
+        resp.json().then(displayAll)
+    }
+    function getData(){
+        fetch("http://localhost:3000/todos", {
+            method:"GET",
+            // headers:{
+            //     "Content-Type":"Application/json"
+            // }
+        }).then(getDataCallback)
+    }
+    getData();
+    ///////////Add1TodoToBody////////
+    function addToBody(data) {
+
+        var parentElement = document.getElementById("mainArea")
+            var childElement = document.createElement("div")
+
+            var grandChildElement1 = document.createElement("span")
+            var grandChildElement2 = document.createElement("span")
+            var grandChildElement3 = document.createElement("span")            
+
+            grandChildElement1.innerHTML = data.title + " ";
+            grandChildElement2.innerHTML = data.completed + " ";
+            grandChildElement3.innerHTML = data.description + " ";
+
+            var grandChildElement4=document.createElement("button")
+            grandChildElement4.innerHTML="Delete"
+            grandChildElement4.setAttribute("onclick", "deleteTodo(" + data.id + ")")
+
+            var grandChildElement5 = document.createElement("span")   
+            grandChildElement5.innerHTML = "id:" + data[i].id + " ";
+
+
+            childElement.appendChild(grandChildElement1)
+            childElement.appendChild(grandChildElement2)
+            childElement.appendChild(grandChildElement3)
+            childElement.appendChild(grandChildElement4)
+            childElement.appendChild(grandChildElement5)
+            parentElement.appendChild(childElement)
+
+
+        }
+    ///////////SaveTodo//////////////
+    function saveTodoCallback(resp) {
+        resp.json().then(addToBody);
+    }
+    function saveTodo() {
+
+        fetch("http://localhost:3000/todos", {  //why '/todos'? Because that's the route defined in the backend to post a todo.
+            method: "POST",
+            body: JSON.stringify({
+                title: document.getElementById("title").value,
+                completed: document.getElementById("completed").value,
+                description: document.getElementById("description").value
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(saveTodoCallback)
+    }
+    ///////////GetTodoByID///////////
+    function GetTodoCallback(resp) {
+        var parentElement=document.getElementById("mainArea");
+        parentElement.innerHTML=("Main Area");
+        resp.json().then(addToBody);
+    }
+    function getTodo() {
+        fetch(("http://localhost:3000/todos/" + document.getElementById("id").value), { //document.getElementById(id)==>this points to the id the user will input in the box,i.e, it'll get the element inputted in the box.
+            method: "GET",
+            headers: {
+                "Content-Type": "Application/json"
+            }
+        }).then(GetTodoCallback)
+    }
+    ///////////EditTodoByID//////////
+    function editTodoCallback(resp) {
+        var parentElement=document.getElementById("mainArea");
+        parentElement.innerHTML=("Main Area");
+        resp.json().then(addToBody)
+    }
+    function editTodo() { 
+        fetch("http://localhost:3000/todos/" + document.getElementById("id").value, {
+            method: "PUT",
+            body: JSON.stringify({
+                title: document.getElementById("title").value,
+                completed: document.getElementById("completed").value,
+                description: document.getElementById("description").value
+            }),
+            headers: {
+                "Content-Type": "Application/json"
+            }
+        }).then(editTodoCallback)
+    }
+    //////////DeleteTodoByID/////////
+    function deleteCallback(resp) {
+        resp.json().then(removeFromBody)
+    }
+    function DeleteTodoByID() {
+        fetch("http://localhost:3000/todos/" + document.getElementById("id").value, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(deleteCallback)
+    }
+    //////////DeleteWithButton///////
+    function deleteTodo(id){
+        fetch("http://localhost:3000/todos/" + id, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        }).then(deleteCallback)
+    }
+
+</script>
