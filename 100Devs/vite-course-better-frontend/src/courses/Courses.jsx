@@ -11,7 +11,7 @@ function Courses(props) {
 
     let role = props.role;
 
-    useEffect(() => {
+    useEffect(() => { 
         async function fetchData() {
             const courses = await fetchCourses(role, navigate);
             setCourses(courses);
@@ -19,7 +19,7 @@ function Courses(props) {
 
         fetchData();
     }, []);
-
+ 
     if (courses == null) {
         return <div>
             Loading courses...

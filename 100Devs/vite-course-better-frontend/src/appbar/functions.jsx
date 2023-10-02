@@ -12,7 +12,7 @@ export async function fetchUsers() {
 }
 
 export function logout(navigate) {
-    localStorage.clear();
+    localStorage.clear(); 
     navigate("/");
     location.reload();
 }

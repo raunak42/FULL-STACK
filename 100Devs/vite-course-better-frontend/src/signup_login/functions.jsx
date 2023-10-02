@@ -6,7 +6,7 @@ export async function AdminSignup(username, password, navigate) {
             username: username,
             password: password
         })
-        let data = res.data;
+        let data = res.data; 
         console.log(data);
         alert(data.message);  
         navigate("/admin/login");

@@ -1,6 +1,6 @@
 import { Button, Card, Typography } from "@mui/material";
 import { useContext, useState } from "react";
-import { RecoilRoot, atom, useRecoilValue, useSetRecoilState } from "recoil";
+import { RecoilRoot, atom, useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 
 function CounterRecoil() {
     return (
@@ -44,15 +44,18 @@ function Increase() {
 }
 
 function Decrease() {
-    const setCount = useSetRecoilState(countState);
+    const [count, setCount] = useRecoilState(countState)
     return <div>
         <Button variant="contained" onClick={() => {
             setCount((c) => c - 1)
         }}>
             Decrease
         </Button>
+        <Typography>
+            {count}
+        </Typography>
     </div>
-}
+} 
 
 function CountComponent() {
     const count = useRecoilValue(countState);

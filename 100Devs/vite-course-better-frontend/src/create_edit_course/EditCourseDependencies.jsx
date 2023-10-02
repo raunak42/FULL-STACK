@@ -30,7 +30,7 @@ function SendCourseAsProp() {
     }
     else if (course) {
         return <div>
-            <GrayTopper title={course.title}></GrayTopper>
+            <GrayTopper title={course.title}></GrayTopper> 
             <Grid container>
                 <Grid item  lg={8} md={12} sm={12}  >
                     <div style={{ marginTop:-50 ,marginBottom: 100 }}>

@@ -4,23 +4,22 @@ import { BuyButton, EditButton } from "./Buttons";
 
 
 
-function CourseCard(props) {
+function CourseCard(props) { 
     const navigate = useNavigate();
     const courseId = props.id;
     const renderBuyButton = () => BuyButton(courseId, props);
-    const renderEditButton = () => EditButton(courseId, navigate);
+    const renderEditButton = () => EditButton(courseId, navigate);  
 
     return <Card
         style={{
-            border: "",
             margin: 10,
             width: 300,
             minHeight: 200,
-            backgroundColor: "#FAF0E6",
+            backgroundColor: "#FAF0E6", 
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between"
-
+            justifyContent: "space-between",
+            
         }}>
         <Typography textAlign={"center"} variant="h6">{props.course.title}</Typography>
         <Typography textAlign={"center"} variant="subtitle1">{props.course.description}</Typography>
