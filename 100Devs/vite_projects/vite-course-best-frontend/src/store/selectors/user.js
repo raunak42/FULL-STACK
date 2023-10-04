@@ -3,7 +3,7 @@ import { userState } from "../atoms/user";
 
 
 export const isLoadingUser = selector({
-    key: "isLoadingUser",
+    key: "isLoadingUser", 
     get: ({ get }) => {
         const state = get(userState);
         return state.isLoading;
